@@ -57,7 +57,7 @@ export default class Unseal extends Component {
         <Nav />
         <h3 className="text-center">Unseal Vault</h3>
         <hr/>
-        
+
         <div className="col-sm-12">
           <div className="jumbotron text-center">
             <Form horizontal onSubmit={this.handleSubmit}>
