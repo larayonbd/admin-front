@@ -4,7 +4,6 @@ import { Button,Jumbotron  } from 'react-bootstrap';
 
 class Unauthorized extends Component {
   componentDidMount(){
-      let user =  localStorage.getItem('role');
       let logged = localStorage.getItem('token');
       if(logged == null){
       window.location.href="/login";

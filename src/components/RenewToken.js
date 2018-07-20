@@ -5,14 +5,14 @@ import Nav from './Nav';
 import { Form, FormControl, FormGroup, ControlLabel , Col  } from 'react-bootstrap';
 
 class RenewToken extends Component {
-  
+
   componentDidMount(){
     let role =  localStorage.getItem('role');
       let logged = localStorage.getItem('token');
       if(logged == null ){
         window.location.href="/login";
       }else {
-        if (role != "operations") {
+        if (role !== "operations") {
           window.location.href="/unauthorized";
         }
       }
