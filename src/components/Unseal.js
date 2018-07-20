@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Nav from './Nav';
 import axios from 'axios';
-import { Alert, Form, FormControl, FormGroup, ControlLabel , Col, Button  } from 'react-bootstrap';
+import {Form, FormControl, FormGroup, ControlLabel , Col, Button  } from 'react-bootstrap';
 import {API_BASE} from "../constants.js";
 
 export default class Unseal extends Component {
@@ -14,9 +14,19 @@ export default class Unseal extends Component {
     this.state = {
       key1: "",
       key2: "",
-      key3: "",
-      show: true
+      key3: ""
+      //show: true
     };
+  }
+
+  componentDidMount() {
+    let logged = localStorage.getItem('token');
+    if(logged){
+
+    }else {
+        window.location.href="/login";
+      }
+
   }
 
   handleDismiss() {
@@ -39,10 +49,16 @@ export default class Unseal extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { key1, key2, key3 } = this.state;
-    axios.put(API_BASE+'/vault-service/unseal',{key1: key1, key2: key2, key3: key3})
+    var obj = JSON.parse({'key1': this.state.key1, 'key2': this.state.key2, 'key3': this.state.key3})
+    axios.put(API_BASE+'/vault-service/unseal',obj)
       .then(function (res)  {
         console.log(res.data);
+        if(res.data.data.key1 === false || res.data.data.key2 === false || res.data.data.key3 === false){
+          let data = JSON.stringify(res.data.data, null,2)
+          window.alert("Llaves erroneas: \n"+ data)
+        }else {
+          window.location.href="/vault-status";
+        }
 
       })
       .catch(function(error) {
@@ -57,7 +73,6 @@ export default class Unseal extends Component {
         <Nav />
         <h3 className="text-center">Unseal Vault</h3>
         <hr/>
-
         <div className="col-sm-12">
           <div className="jumbotron text-center">
             <Form horizontal onSubmit={this.handleSubmit}>
@@ -70,7 +85,7 @@ export default class Unseal extends Component {
                       placeholder="key1"
                       value={key1}
                       onChange={this.handleChange}
-                      type="password"
+                      type="text"
                     />
                   </Col>
                 </FormGroup>
@@ -83,7 +98,7 @@ export default class Unseal extends Component {
                       placeholder="Key2"
                       value={key2}
                       onChange={this.handleChange}
-                      type="password"  />
+                      type="text"  />
                   </Col>
                 </FormGroup>
                 <FormGroup controlId="key3" bsSize="large">
@@ -95,7 +110,7 @@ export default class Unseal extends Component {
                       placeholder="Key3"
                       value={key3}
                       onChange={this.handleChange}
-                      type="password"  />
+                      type="text"  />
                   </Col>
                 </FormGroup>
                 <FormGroup>
